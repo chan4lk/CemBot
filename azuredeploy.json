@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "siteName": {
-      "defaultValue": "CEM Bot"
+      "defaultValue": "CEM Bot",
       "type": "string"
     },
     "hostingPlanName": {
