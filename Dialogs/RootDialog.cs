@@ -12,7 +12,7 @@
     {
 
         private string name;
-        private int age;
+        
 
         public async Task StartAsync(IDialogContext context)
         {
@@ -32,7 +32,7 @@
 
         private async Task SendWelcomeMessageAsync(IDialogContext context)
         {
-            await context.PostAsync("Hi, I'm the Basic Multi Dialog bot. Let's get started.");
+            await context.PostAsync("Hi, I'm the CEM bot. Let's get started.");
 
             context.Call(new NameDialog(), this.NameDialogResumeAfter);
         }
@@ -43,7 +43,7 @@
             {
                 this.name = await result;
 
-                context.Call(new AgeDialog(this.name), this.AgeDialogResumeAfter);
+                context.Call(new QuestionDialog(this.name), this.QuestionDialogResumeAfter);
             }
             catch (TooManyAttemptsException)
             {
@@ -53,13 +53,13 @@
             }
         }
 
-        private async Task AgeDialogResumeAfter(IDialogContext context, IAwaitable<int> result)
+        private async Task QuestionDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {
             try
             {
-                this.age = await result;
+                var message = await result;
 
-                await context.PostAsync($"Your name is { name } and your age is { age }.");
+                await context.PostAsync($"Your name is { name } and { message }.");
 
             }
             catch (TooManyAttemptsException)
