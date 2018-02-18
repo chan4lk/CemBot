@@ -12,7 +12,7 @@
 
         public async Task StartAsync(IDialogContext context)
         {
-            await context.PostAsync("What is your name?");
+            await context.SayAsync("What is your name?", speak: "What is your name?");
 
             context.Wait(this.MessageReceivedAsync);
         }
@@ -34,7 +34,7 @@
                 --attempts;
                 if (attempts > 0)
                 {
-                    await context.PostAsync("I'm sorry, I don't understand your reply. What is your name (e.g. 'Bill', 'Melinda')?");
+                    await context.SayAsync("I'm sorry, I don't understand your reply. What is your name (e.g. 'Bill', 'Melinda')?", speak: "I'm sorry, I don't understand your reply. What is your name (e.g. 'Bill', 'Melinda')?");
 
                     context.Wait(this.MessageReceivedAsync);
                 }

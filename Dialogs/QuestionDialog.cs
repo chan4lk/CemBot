@@ -18,9 +18,10 @@
 
         public async Task StartAsync(IDialogContext context)
         {
-            await context.PostAsync($"{ this.name }, Would you like to play a game?");
+            await context.SayAsync($"{ this.name }, Would you like to play a game?", speak:$"{ this.name }, Would you like to play a game ? ");
 
-            context.Wait(this.MessageReceivedAsync);
+
+context.Wait(this.MessageReceivedAsync);
         }
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
@@ -42,7 +43,7 @@
                 --attempts;
                 if (attempts > 0)
                 {
-                    await context.PostAsync("I'm sorry, I don't understand your reply. Would you like to play a game(yes or no)?");
+                    await context.SayAsync("I'm sorry, I don't understand your reply. Would you like to play a game(yes or no)?", speak: "I'm sorry, I don't understand your reply. Would you like to play a game(yes or no)?");
 
                     context.Wait(this.MessageReceivedAsync);
                 }

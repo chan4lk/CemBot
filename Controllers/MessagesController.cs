@@ -21,7 +21,9 @@ namespace BasicMultiDialogBot
             {
                 /* Creates a dialog stack for the new conversation, adds RootDialog to the stack, and forwards all 
                  *  messages to the dialog stack. */
+                activity.Speak = "speak this";
                 await Conversation.SendAsync(activity, () => new RootDialog());
+                
             }
             else
             {

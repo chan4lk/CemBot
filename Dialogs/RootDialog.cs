@@ -32,7 +32,7 @@
 
         private async Task SendWelcomeMessageAsync(IDialogContext context)
         {
-            await context.PostAsync("Hi, I'm the CEM bot. Let's get started.");
+            await context.SayAsync("Hi, I'm the CEM bot. Let's get started.", speak: "Hi, I'm the CEM bot. Let's get started.");
 
             context.Call(new NameDialog(), this.NameDialogResumeAfter);
         }
@@ -47,7 +47,7 @@
             }
             catch (TooManyAttemptsException)
             {
-                await context.PostAsync("I'm sorry, I'm having issues understanding you. Let's try again.");
+                await context.SayAsync("I'm sorry, I'm having issues understanding you. Let's try again.", speak:"I'm sorry, I'm having issues understanding you.Let's try again.");
 
                 await this.SendWelcomeMessageAsync(context);
             }
@@ -58,13 +58,13 @@
             try
             {
                 var message = await result;
-
-                await context.PostAsync($"Your name is { name } and { message }.");
+                
+                await context.SayAsync($"Your name is { name } and { message }.", speak: $"Your name is { name } and { message }.");
 
             }
             catch (TooManyAttemptsException)
             {
-                await context.PostAsync("I'm sorry, I'm having issues understanding you. Let's try again.");
+                await context.SayAsync("I'm sorry, I'm having issues understanding you. Let's try again.", speak: "I'm sorry, I'm having issues understanding you. Let's try again.");
             }
             finally
             {
