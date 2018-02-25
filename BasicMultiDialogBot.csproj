@@ -135,7 +135,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\NameDialog.cs" />
-    <Compile Include="Dialogs\QuestionDialog.cs" />
+    <Compile Include="Dialogs\QuestionDialog1.cs" />
+    <Compile Include="Dialogs\QuestionDialog2.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

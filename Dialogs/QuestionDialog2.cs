@@ -6,13 +6,20 @@
     using Microsoft.Bot.Connector;
 
     [Serializable]
-    public class NameDialog : IDialog<string>
+    public class QuestionDialog2 : IDialog<string>
     {
         private int attempts = 3;
+        private string name;
+        private string message;
+
+        public QuestionDialog2(string name, string message)
+        {
+            this.name = name;
+            this.message = $"{name} {message}";
+        }
 
         public async Task StartAsync(IDialogContext context)
         {
-            string message = "Please wait till I recognize you.";
             await context.SayAsync(message);
 
             context.Wait(this.MessageReceivedAsync);
@@ -35,7 +42,7 @@
                 --attempts;
                 if (attempts > 0)
                 {
-                    await context.SayAsync("I'm sorry, I cannot recognize you. What is your name (e.g. 'Bill', 'Melinda')?", speak: "I'm sorry, I don't understand your reply. What is your name (e.g. 'Bill', 'Melinda')?");
+                    await context.SayAsync($"I'm sorry, I cannot understand you. {message}");
 
                     context.Wait(this.MessageReceivedAsync);
                 }

@@ -12,7 +12,15 @@
     {
 
         private string name;
-        
+        private string[] questions =
+        {
+            "What do you think about our stall?",
+            "What is the rating you would give for our stall out of 10?",
+            "Will you recommend our stall to your friends as well?"
+        };
+        private int questionCount = 0;
+
+        private string retryMessage = "I'm sorry, I'm having issues understanding you.Let's try again.";
 
         public async Task StartAsync(IDialogContext context)
         {
@@ -32,7 +40,7 @@
 
         private async Task SendWelcomeMessageAsync(IDialogContext context)
         {
-            await context.SayAsync("Hi, I'm the CEM bot. Let's get started.", speak: "Hi, I'm the CEM bot. Let's get started.");
+            await context.SayAsync("Hi, I'm the CEM bot. Let's get started.");
 
             context.Call(new NameDialog(), this.NameDialogResumeAfter);
         }
@@ -42,12 +50,12 @@
             try
             {
                 this.name = await result;
-
-                context.Call(new QuestionDialog(this.name), this.QuestionDialogResumeAfter);
+                questionCount = 0;
+                context.Call(new QuestionDialog2(this.name, this.questions[questionCount++]), this.QuestionDialogResumeAfter);
             }
             catch (TooManyAttemptsException)
             {
-                await context.SayAsync("I'm sorry, I'm having issues understanding you. Let's try again.", speak:"I'm sorry, I'm having issues understanding you.Let's try again.");
+                await context.SayAsync(this.retryMessage);
 
                 await this.SendWelcomeMessageAsync(context);
             }
@@ -56,15 +64,36 @@
         private async Task QuestionDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {
             try
+            {                
+                if(questionCount == this.questions.Length-2)
+                {
+                    context.Call(new QuestionDialog2(this.name, this.questions[questionCount++]), this.FinallyGreet);
+                }
+                else
+                {
+                    context.Call(new QuestionDialog2(this.name, this.questions[questionCount++]), this.QuestionDialogResumeAfter);
+                }
+            }
+            catch (TooManyAttemptsException)
+            {
+                await context.SayAsync(retryMessage);
+
+                await this.SendWelcomeMessageAsync(context);
+            }
+        }
+
+        private async Task FinallyGreet(IDialogContext context, IAwaitable<string> result)
+        {
+            try
             {
                 var message = await result;
                 
-                await context.SayAsync($"Your name is { name } and { message }.", speak: $"Your name is { name } and { message }.");
+                await context.SayAsync($"Thank you for visiting CEM stall {name} Please enjoy.");
 
             }
             catch (TooManyAttemptsException)
             {
-                await context.SayAsync("I'm sorry, I'm having issues understanding you. Let's try again.", speak: "I'm sorry, I'm having issues understanding you. Let's try again.");
+                await context.SayAsync(retryMessage);
             }
             finally
             {
