@@ -100,7 +100,7 @@
         {
             try
             {
-                if (questionCount > this.Questions.Length - 1)
+                if (questionCount > this.Questions.Length-2)
                 {
                     context.Call(new QuestionDialog2(this.name, this.Questions[questionCount++]), this.FinallyGreet);
                 }
