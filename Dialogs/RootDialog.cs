@@ -70,7 +70,7 @@
             try
             {
                 this.name = await result;
-                isChiefGuest = (name == cheifGuestName);
+                isChiefGuest = (name.ToLower() == cheifGuestName.ToLower());
                 context.Call(new GreetingDialog(this.name, isChiefGuest), this.GreetingDialogResumeAfter);
             }
             catch (TooManyAttemptsException)
