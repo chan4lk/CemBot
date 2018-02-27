@@ -24,8 +24,7 @@
         private string[] chiefGuestQuestion =
         {
             "What do you think about Tech day?",
-            "What do you think about me?",
-            "Will you recommend our stall to your friends as well?"
+            "What do you think about me?"            
         };
 
         public string[] Questions
@@ -61,7 +60,7 @@
 
         private async Task SendWelcomeMessageAsync(IDialogContext context)
         {
-            await context.SayAsync($"Hi, I'm {botName}. Let's get started.");
+            await context.SayAsync($"Hi, I'm {botName}.");
 
             context.Call(new NameDialog(), this.NameDialogResumeAfter);
         }

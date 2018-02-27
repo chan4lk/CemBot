@@ -23,7 +23,7 @@
         {
             string message = string.Empty;
             if (isCheifGuest)
-                message = $"Hello {name} welcome to Tech day 2018. How do you do?"; ;
+                message = $"Hello {name} welcome to Virtusa Tech day 2018. How do you do?"; ;
 
             message = $"Hello {name} How do you do?";
 
