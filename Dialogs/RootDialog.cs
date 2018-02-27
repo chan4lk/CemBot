@@ -6,21 +6,41 @@
     using Microsoft.Bot.Builder.Dialogs;
     using Microsoft.Bot.Connector;
 
-    #pragma warning disable 1998
+#pragma warning disable 1998
 
     [Serializable]
     public class RootDialog : IDialog<object>
     {
 
         private string name;
+        private bool isChiefGuest = false;
         private string[] questions =
         {
-            "What do you think about our stall?",
+            "What do you think about CEM stall?",
             "What is the rating you would give for our stall out of 10?",
             "Will you recommend our stall to your friends as well?"
         };
+
+        private string[] chiefGuestQuestion =
+        {
+        "What do you think about CEM stall?",
+            "What is the rating you would give for our stall out of 10?",
+            "Will you recommend our stall to your friends as well?"
+        };
+
+        public string[] Questions
+        {
+            get
+            {
+                if (isChiefGuest == true)
+                    return chiefGuestQuestion;
+                return questions;
+            }
+        }
+
         private int questionCount = 0;
         private static string botName = ConfigurationManager.AppSettings["BotName"];
+        private static string cheifGuestName = ConfigurationManager.AppSettings["CheifGuestName"];
         private string retryMessage = "I'm sorry, I'm having issues understanding you.Let's try again.";
 
         public async Task StartAsync(IDialogContext context)
@@ -51,8 +71,23 @@
             try
             {
                 this.name = await result;
+                isChiefGuest = (name == cheifGuestName);
+                context.Call(new GreetingDialog(this.name), this.GreetingDialogResumeAfter);
+            }
+            catch (TooManyAttemptsException)
+            {
+                await context.SayAsync(this.retryMessage);
+
+                await this.SendWelcomeMessageAsync(context);
+            }
+        }
+
+        private async Task GreetingDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
+        {
+            try
+            {
                 questionCount = 0;
-                context.Call(new QuestionDialog2(this.name, this.questions[questionCount++]), this.QuestionDialogResumeAfter);
+                context.Call(new QuestionDialog2(this.name, this.Questions[questionCount++]), this.QuestionDialogResumeAfter);
             }
             catch (TooManyAttemptsException)
             {
@@ -65,14 +100,14 @@
         private async Task QuestionDialogResumeAfter(IDialogContext context, IAwaitable<string> result)
         {
             try
-            {                
-                if(questionCount == this.questions.Length-2)
+            {
+                if (questionCount == this.Questions.Length - 2)
                 {
-                    context.Call(new QuestionDialog2(this.name, this.questions[questionCount++]), this.FinallyGreet);
+                    context.Call(new QuestionDialog2(this.name, this.Questions[questionCount++]), this.FinallyGreet);
                 }
                 else
                 {
-                    context.Call(new QuestionDialog2(this.name, this.questions[questionCount++]), this.QuestionDialogResumeAfter);
+                    context.Call(new QuestionDialog2(this.name, this.Questions[questionCount++]), this.QuestionDialogResumeAfter);
                 }
             }
             catch (TooManyAttemptsException)
@@ -88,7 +123,7 @@
             try
             {
                 var message = await result;
-                
+
                 await context.SayAsync($"Thank you for visiting CEM stall {name} Please enjoy.");
 
             }

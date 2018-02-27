@@ -6,13 +6,20 @@
     using Microsoft.Bot.Connector;
 
     [Serializable]
-    public class NameDialog : IDialog<string>
+    public class GreetingDialog : IDialog<string>
     {
         private int attempts = 3;
+        private string name = string.Empty;
+        private string message = string.Empty;
+
+        public GreetingDialog(string name)
+        {
+            this.name = name;            
+        }
 
         public async Task StartAsync(IDialogContext context)
         {
-            string message = "Please wait till I recognize you.";
+            string message = $"Hello {name} How do you do?";
             await context.SayAsync(message);
 
             context.Wait(this.MessageReceivedAsync);
@@ -23,7 +30,7 @@
             var message = await result;
 
             /* If the message returned is a valid name, return it to the calling dialog. */
-            if ((message.Text != null) && (message.Text.Trim().Length > 0) && message.Text.ToLower() != "unknown")
+            if ((message.Text != null) && (message.Text.Trim().Length > 0))
             {
                 /* Completes the dialog, removes it from the dialog stack, and returns the result to the parent/calling
                     dialog. */
@@ -32,20 +39,19 @@
             /* Else, try again by re-prompting the user. */
             else
             {
-                //--attempts;
-                //if (attempts > 0)
-                //{
-                //    await context.SayAsync("I'm sorry, I cannot recognize you. What is your name ?", speak: "I'm sorry, I don't understand your reply. What is your name (e.g. 'Bill', 'Melinda')?");
+                --attempts;
+                if (attempts > 0)
+                {
+                    await context.SayAsync($"I'm sorry, I cannot understand you. {message}");
 
-                //    context.Wait(this.MessageReceivedAsync);
-                //}
-                //else
-                //{
-                //    /* Fails the current dialog, removes it from the dialog stack, and returns the exception to the 
-                //        parent/calling dialog. */
-                //    context.Fail(new TooManyAttemptsException("Message was not a string or was an empty string."));
-                //}
-                context.Done("Friend");
+                    context.Wait(this.MessageReceivedAsync);
+                }
+                else
+                {
+                    /* Fails the current dialog, removes it from the dialog stack, and returns the exception to the 
+                        parent/calling dialog. */
+                    context.Fail(new TooManyAttemptsException("Message was not a string or was an empty string."));
+                }
             }
         }
     }
