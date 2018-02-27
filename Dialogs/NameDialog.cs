@@ -23,7 +23,7 @@
             var message = await result;
 
             /* If the message returned is a valid name, return it to the calling dialog. */
-            if ((message.Text != null) && (message.Text.Trim().Length > 0))
+            if ((message.Text != null) && (message.Text.Trim().Length > 0) && message.Text.ToLower() != "unknown")
             {
                 /* Completes the dialog, removes it from the dialog stack, and returns the result to the parent/calling
                     dialog. */
