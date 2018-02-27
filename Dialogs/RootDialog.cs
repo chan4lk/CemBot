@@ -23,7 +23,7 @@
 
         private string[] chiefGuestQuestion =
         {
-        "What do you think about CEM stall?",
+            "What do you think about CEM stall?",
             "What is the rating you would give for our stall out of 10?",
             "Will you recommend our stall to your friends as well?"
         };
