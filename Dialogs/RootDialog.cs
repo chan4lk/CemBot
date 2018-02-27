@@ -1,6 +1,7 @@
 ﻿namespace BasicMultiDialogBot.Dialogs
 {
     using System;
+    using System.Configuration;
     using System.Threading.Tasks;
     using Microsoft.Bot.Builder.Dialogs;
     using Microsoft.Bot.Connector;
@@ -19,7 +20,7 @@
             "Will you recommend our stall to your friends as well?"
         };
         private int questionCount = 0;
-
+        private static string botName = ConfigurationManager.AppSettings["BotName"];
         private string retryMessage = "I'm sorry, I'm having issues understanding you.Let's try again.";
 
         public async Task StartAsync(IDialogContext context)
@@ -40,7 +41,7 @@
 
         private async Task SendWelcomeMessageAsync(IDialogContext context)
         {
-            await context.SayAsync("Hi, I'm the CEM bot. Let's get started.");
+            await context.SayAsync($"Hi, I'm {botName}. Let's get started.");
 
             context.Call(new NameDialog(), this.NameDialogResumeAfter);
         }
