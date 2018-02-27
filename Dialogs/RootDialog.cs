@@ -98,7 +98,7 @@
             }
             finally
             {
-                await this.SendWelcomeMessageAsync(context);
+                context.EndConversation("end");
             }
         }
     }
