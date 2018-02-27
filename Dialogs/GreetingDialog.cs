@@ -11,16 +11,22 @@
         private int attempts = 3;
         private string name = string.Empty;
         private string message = string.Empty;
+        private bool isCheifGuest = false;
 
-        public GreetingDialog(string name)
+        public GreetingDialog(string name, bool isCheifGuest)
         {
-            this.name = name;            
+            this.name = name;
+            this.isCheifGuest = isCheifGuest;
         }
 
         public async Task StartAsync(IDialogContext context)
         {
+            string message = string.Empty;
+            if (isCheifGuest)
+                message = $"Hello {name} welcome to Tech day 2018. How do you do?"; ;
 
-            string message = $"Hello {name} How do you do?";
+            message = $"Hello {name} How do you do?";
+
             await context.SayAsync(message);
 
             context.Wait(this.MessageReceivedAsync);

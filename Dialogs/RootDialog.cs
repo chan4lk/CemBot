@@ -23,8 +23,8 @@
 
         private string[] chiefGuestQuestion =
         {
-            "What do you think about CEM stall?",
-            "What is the rating you would give for our stall out of 10?",
+            "What do you think about Tech day?",
+            "What do you think about me?",
             "Will you recommend our stall to your friends as well?"
         };
 
@@ -72,7 +72,7 @@
             {
                 this.name = await result;
                 isChiefGuest = (name == cheifGuestName);
-                context.Call(new GreetingDialog(this.name), this.GreetingDialogResumeAfter);
+                context.Call(new GreetingDialog(this.name, isChiefGuest), this.GreetingDialogResumeAfter);
             }
             catch (TooManyAttemptsException)
             {
@@ -122,9 +122,13 @@
         {
             try
             {
-                var message = await result;
+                string message = string.Empty;
 
-                await context.SayAsync($"Thank you for visiting CEM stall {name} Please enjoy.");
+                if (isChiefGuest)
+                    message = "Thank you for being here with us today. Please enjoy.";
+                else
+                    message = $"Thank you for visiting CEM stall {name} Please enjoy.";
+                await context.SayAsync(message);
 
             }
             catch (TooManyAttemptsException)
